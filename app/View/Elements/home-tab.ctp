@@ -1,0 +1,442 @@
+<?php
+//echo $this->element('sql_dump');
+?>
+<div class="tabpanel">
+                            <div id="TabbedPanels1" class="TabbedPanels">
+                                <ul class="TabbedPanelsTabGroup">
+                                    <li class="TabbedPanelsTab" tabindex="0"><?php echo RECENTPUBLICITY;?></li>
+                                    <li class="TabbedPanelsTab" tabindex="0"><?php echo REQUESTPARTS;?></li>
+                                    <li class="TabbedPanelsTab" tabindex="0"><?php echo PROMOTEDADS;?></li>
+                                    <li class="TabbedPanelsTab" tabindex="0"><?php echo MOSTFAVOURITEADS;?></li>
+                                    <li class="TabbedPanelsTab" tabindex="0"><?php echo MOSTPOPULARMODEL;?></li>
+                                </ul>
+                                
+                                <div class="TabbedPanelsContentGroup">
+                                    <div class="TabbedPanelsContent">
+                                        <div class="block">
+                                             <div class="block-body">
+                                             <?php if(!empty($recentRes)){
+												 //echo count($recentRes);exit;
+												 foreach($recentRes as $recentResult)
+												 {
+													 $postId=stripslashes($recentResult['PostAd']['adv_id']);
+													$adv_name=stripslashes($recentResult['PostAd']['adv_name']);
+													$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+													$product_cond=stripslashes($recentResult['PostAd']['product_cond']);
+													$price=stripslashes($recentResult['PostAd']['price']);
+													$currency=stripslashes($recentResult['PostAd']['currency']);
+													$quantity=stripslashes($recentResult['PostAd']['quantity']);
+													$adv_details=stripslashes($recentResult['PostAd']['adv_details']);
+													$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+													$slug=stripslashes($recentResult['PostAd']['slug']);
+													$salespath=$base_url.'pages/sales-details/'.$slug;
+													$salesImg=$this->Custom->BapCustUniSalesImg($postId);
+													
+												 ?>
+                                                <div class="col">
+                                                    <div class="img-wrapper">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php //echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                        <?php
+														if(!empty($salesImg))
+													{
+					
+													if (file_exists('files/postad/128X120_'.$salesImg['PostadImg']['img_path'])) {
+													$imgpath=$base_url.'files/postad/128X120_'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+													   }else{
+													$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+														   }
+													
+													?>
+                                                            <img src="<?php echo $imgpath;?>" alt="<?php echo $adv_name;?>" border="0" width="120" height="120" class="thumb">
+                                                            <?php }else{?>
+                                                            <img src="<?php echo $base_url;?>images/profileholder.png" alt="<?php echo $adv_name;?>" border="0" width="120" height="120" class="thumb"> 
+                                                            <?php }?>
+                                                        </a>
+                                                    </div>
+                                                    <div class="ribbon"></div>
+                                                    
+                                                    <span class="block-title">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                        <?php echo $adv_name;?>
+                                                        </a>
+                                                    </span>
+                                                    <br>
+                                                    <p><?php echo nl2br(strip_tags($content));?></p>
+                                                    <br>
+                                                    <div class="rating">
+                                                       <?php $avgrating=$this->Custom->SalesRatingcout($postId);
+                                                  if(!empty($avgrating))
+                                                    {
+                                                        for($singavgrating=1; $singavgrating<=round($avgrating); $singavgrating++)
+                                                        {
+                                                            if($singavgrating>$avgrating)
+                                                            {
+                                                                ?>
+                                                                <img border="0" src="<?php echo $base_url;?>/images/star-small-halfactive.png" alt="rating" />
+                                                                <?php
+                                                            }
+                                                            else
+                                                            {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-active.png" alt="rating" />
+                                                            <?php
+                                                            }
+                                                        }
+                                                    }
+                                                    if(round($avgrating)<5)
+                                                    {
+                                                        for($singavg=5; round($avgrating)<$singavg; $singavg--)
+                                                        {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-inactive.png">   
+                                                            <?php
+                                                        }
+                                                    }
+                                                 ?>
+                                                    </div>
+                                                    <br>
+                                                    <span class="price"><?php echo $price.' '.$currency;?></span>
+                                                </div>
+
+                                                <?php 
+												}
+												}?>
+												<div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="TabbedPanelsContent">
+                                        <div class="block">
+                                             <div class="block-body">
+                                             <?php if(!empty($recentPartsRes))
+											 {
+												 //echo count($recentPartsRes);
+												 foreach($recentPartsRes as $recentPartsResult)
+												 {
+													 $offer_parts_id=stripslashes($recentPartsResult['RequestAccessory']['part_id']);
+													 $offer_name_piece=stripslashes($recentPartsResult['RequestAccessory']['name_piece']);
+													  $offer_name_piece=(strlen($offer_name_piece)>30)?substr($offer_name_piece,0,30)."..." : $offer_name_piece;
+													 $offer_description=stripslashes($recentPartsResult['RequestAccessory']['description']);
+													 $offer_description=(strlen($offer_description)>30)?substr($offer_description,0,30)."..." : $offer_description;
+													 $offerslug=$this->webroot.'pages/request-parts/'.$recentPartsResult['RequestAccessory']['slug'];
+													$offer_img=$this->Custom->RequestSingimg($offer_parts_id);
+													if(!empty($offer_img))
+													{
+														$offer_part_img=$offer_img['RequestImg']['img_path'];
+													}
+													else
+													{
+														$offer_part_img='';
+													}
+													$offer_price=stripslashes($recentPartsResult['RequestAccessory']['max_price']);
+													 $offer_currency=stripslashes($recentPartsResult['RequestAccessory']['currency']);
+												 
+												 ?>
+                                                <div class="col">
+                                                    <div class="img-wrapper">
+                                                        <a href="<?php echo $offerslug;?>" title="<?php echo $offer_name_piece;?>">
+                                                        <?php
+														if($offer_part_img!=''){
+														if (file_exists("files/requestpart/128X120_".$offer_part_img)) {
+                                                         $requestparts_img= $base_url."files/requestpart/128X120_".$offer_part_img."?timestamp=".time();                                                        
+														   }else{
+                                                         $requestparts_img= $base_url."files/requestpart/".$offer_part_img."?timestamp=".time();
+															   }
+														 
+														 
+														 
+														 ?>
+                                                        
+                                                            <img src="<?php echo $requestparts_img;?>" border="0" width="120" height="120" class="thumb">
+                                                            <?php }else{?>
+                                                            <img src="<?php echo $base_url;?>images/profileholder.png" border="0" width="120" height="120" class="thumb"> 
+                                                            <?php }?>
+                                                        </a>
+                                                    </div>
+                                                    <div class="ribbon"></div>
+                                                    
+                                                    <span class="block-title">
+                                                        <a href="<?php echo $offerslug;?>" title="<?php echo $offer_name_piece;?>">
+                                                        <?php echo $offer_name_piece;?>
+                                                        </a>
+                                                    </span>
+                                                    <br>
+                                                   <p><?php echo $offer_description;?></p>
+                                                   
+                                                    <br>
+                                                    <span class="price"><?php echo $offer_price.' '.$offer_currency;?></span>
+                                                </div>
+                                                  
+                                              <?php
+												 }
+											 }
+											 ?>
+												<div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="TabbedPanelsContent">
+                                        <div class="block">
+                                             <div class="block-body">
+                                             <?php
+											 if(!empty($promoteSecAd))
+											 {
+												 foreach($promoteSecAd as $promoteSecAdRes)
+												{
+													$postId=stripslashes($promoteSecAdRes['PostAd']['adv_id']);
+													$adv_name=stripslashes($promoteSecAdRes['PostAd']['adv_name']);
+													$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+													$product_cond=stripslashes($promoteSecAdRes['PostAd']['product_cond']);
+													$price=stripslashes($promoteSecAdRes['PostAd']['price']);
+													$currency=stripslashes($promoteSecAdRes['PostAd']['currency']);
+													$quantity=stripslashes($promoteSecAdRes['PostAd']['quantity']);
+													$adv_details=strip_tags(stripslashes($promoteSecAdRes['PostAd']['adv_details']));
+													$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+													$slug=stripslashes($promoteSecAdRes['PostAd']['slug']);
+													$salespath=$base_url.'pages/sales-details/'.$slug;
+													$salesImg=$this->Custom->BapCustUniSalesImg($postId);
+													
+													if(!empty($salesImg))
+															{
+														if (file_exists('files/postad/165X135_'.$salesImg['PostadImg']['img_path'])) {
+															$imgpath=$base_url.'files/postad/165X135_'.$salesImg['PostadImg']['img_path']."?timestamp=".time();              
+														   }else{
+															$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path']."?timestamp=".time();              
+															   }
+																?>
+                                                             <div class="col promotab-col">
+                                                                <div class="img-wrapper">
+                                                                    <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                                        <img src="<?php echo $imgpath;?>" alt="<?php echo $adv_name;?>" border="0" width="120" height="120" class="thumb" style="width: 95%;">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="ribbon"></div>
+                                                                <br>
+                                                                <p><?php echo nl2br($content);?></p>
+                                                                <br>
+                                                                <div class="rating">
+                                                                   <?php $avgrating=$this->Custom->SalesRatingcout($postId);
+																  if(!empty($avgrating))
+																	{
+																		for($singavgrating=1; $singavgrating<=round($avgrating); $singavgrating++)
+																		{
+																			if($singavgrating>$avgrating)
+																			{
+																				?>
+																				<img border="0" src="<?php echo $base_url;?>/images/star-small-halfactive.png" alt="rating" />
+																				<?php
+																			}
+																			else
+																			{
+																			?>
+																			<img border="0" src="<?php echo $base_url;?>/images/star-small-active.png" alt="rating" />
+																			<?php
+																			}
+																		}
+																	}
+																	if(round($avgrating)<5)
+																	{
+																		for($singavg=5; round($avgrating)<$singavg; $singavg--)
+																		{
+																			?>
+																			<img border="0" src="<?php echo $base_url;?>/images/star-small-inactive.png">   
+																			<?php
+																		}
+																	}
+																 ?>
+                                                                </div>
+                                                                <br>
+                                                               
+                                                                <span class="price"><?php echo $price.' '.$currency;?></span>
+                                                            </div>
+                                                           
+                                                            <?php
+                                                              }
+												}
+											 }
+											 ?>
+                                                         
+                                                <div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="TabbedPanelsContent">
+                                        <div class="block">
+                                             <div class="block-body">
+                                                <?php if(!empty($mostFavRes)){
+												 foreach($mostFavRes as $mostFavResult)
+												 {
+													 $postId=stripslashes($mostFavResult['PostAd']['adv_id']);
+													$adv_name=stripslashes($mostFavResult['PostAd']['adv_name']);
+													$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+													$product_cond=stripslashes($mostFavResult['PostAd']['product_cond']);
+													$price=stripslashes($mostFavResult['PostAd']['price']);
+													$currency=stripslashes($mostFavResult['PostAd']['currency']);
+													$quantity=stripslashes($mostFavResult['PostAd']['quantity']);
+													$adv_details=stripslashes($mostFavResult['PostAd']['adv_details']);
+													$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+													$slug=stripslashes($mostFavResult['PostAd']['slug']);
+													$salespath=$base_url.'pages/sales-details/'.$slug;
+													$salesImg=$this->Custom->BapCustUniSalesImg($postId);
+													if(!empty($salesImg))
+													{
+													if (file_exists('files/postad/128X120_'.$salesImg['PostadImg']['img_path'])) {
+													$imgpath=$base_url.'files/postad/128X120_'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+													   }else{
+													$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+														   }
+													
+												 ?>
+                                                <div class="col">
+                                                    <div class="img-wrapper">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                            <img src="<?php echo $imgpath;?>" alt="<?php echo $adv_name;?>" border="0" width="120" height="120" class="thumb">
+                                                        </a>
+                                                    </div>
+                                                    <div class="ribbon"></div>
+                                                    
+                                                    <span class="block-title">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                        <?php echo $adv_name;?>
+                                                        </a>
+                                                    </span>
+                                                    <br>
+                                                   <p><?php echo nl2br(strip_tags($content));?></p>
+                                                    <br>
+                                                    <div class="rating">
+                                                       <?php $avgrating=$this->Custom->SalesRatingcout($postId);
+													  if(!empty($avgrating))
+														{
+															for($singavgrating=1; $singavgrating<=round($avgrating); $singavgrating++)
+															{
+																if($singavgrating>$avgrating)
+																{
+																	?>
+																	<img border="0" src="<?php echo $base_url;?>/images/star-small-halfactive.png" alt="rating" />
+																	<?php
+																}
+																else
+																{
+																?>
+																<img border="0" src="<?php echo $base_url;?>/images/star-small-active.png" alt="rating" />
+																<?php
+																}
+															}
+														}
+														if(round($avgrating)<5)
+														{
+															for($singavg=5; round($avgrating)<$singavg; $singavg--)
+															{
+																?>
+																<img border="0" src="<?php echo $base_url;?>/images/star-small-inactive.png">   
+																<?php
+															}
+														}
+													 ?>
+														</div>
+														<br>
+														<span class="price"><?php echo $price.' '.$currency;?></span>
+													</div>
+	
+													<?php }
+													}
+													}?>
+                                                <div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="TabbedPanelsContent">
+                                        <div class="block">
+                                        	<div class="block-body">
+                                               <?php if(!empty($mostViewRes)){
+												   //pr($mostViewRes);exit;
+												 foreach($mostViewRes as $mostViewResult)
+												 {
+													 $postId=stripslashes($mostViewResult['PostAd']['adv_id']);
+													$adv_name=stripslashes($mostViewResult['PostAd']['adv_name']);
+													$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+													$product_cond=stripslashes($mostViewResult['PostAd']['product_cond']);
+													$price=stripslashes($mostViewResult['PostAd']['price']);
+													$currency=stripslashes($mostViewResult['PostAd']['currency']);
+													$quantity=stripslashes($mostViewResult['PostAd']['quantity']);
+													$adv_details=stripslashes($mostViewResult['PostAd']['adv_details']);
+													$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+													$slug=stripslashes($mostViewResult['PostAd']['slug']);
+													$salespath=$base_url.'pages/sales-details/'.$slug;
+													$salesImg=$this->Custom->BapCustUniSalesImg($postId);
+													if(!empty($salesImg))
+													{
+													if (file_exists('files/postad/128X120_'.$salesImg['PostadImg']['img_path'])) {
+														$imgpath=$base_url.'files/postad/128X120_'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+													   }else{
+													$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path']."?timestamp=".time();
+														   }
+														
+														
+														
+														 ?>
+                                                <div class="col">
+                                                    <div class="img-wrapper">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                            <img src="<?php echo $imgpath;?>" alt="<?php echo $adv_name;?>" border="0" width="120" height="120" class="thumb">
+                                                        </a>
+                                                    </div>
+                                                    <div class="ribbon"></div>
+                                                    
+                                                    <span class="block-title">
+                                                        <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                        <?php echo $adv_name;?>
+                                                        </a>
+                                                    </span>
+                                                    <br>
+                                                   <p> <?php echo nl2br(strip_tags($content));?></p>
+                                                    <br>
+                                                    <div class="rating">
+                                                       <?php $avgrating=$this->Custom->SalesRatingcout($postId);
+                                                  if(!empty($avgrating))
+                                                    {
+                                                        for($singavgrating=1; $singavgrating<=round($avgrating); $singavgrating++)
+                                                        {
+                                                            if($singavgrating>$avgrating)
+                                                            {
+                                                                ?>
+                                                                <img border="0" src="<?php echo $base_url;?>/images/star-small-halfactive.png" alt="rating" />
+                                                                <?php
+                                                            }
+                                                            else
+                                                            {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-active.png" alt="rating" />
+                                                            <?php
+                                                            }
+                                                        }
+                                                    }
+                                                    if(round($avgrating)<5)
+                                                    {
+                                                        for($singavg=5; round($avgrating)<$singavg; $singavg--)
+                                                        {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-inactive.png">   
+                                                            <?php
+                                                        }
+                                                    }
+                                                 ?>
+                                                    </div>
+                                                    <br>
+                                                    <span class="price"><?php echo $price.' '.$currency;?></span>
+                                                </div>
+
+                                                <?php }
+												}
+												}?>
+                                                <div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>

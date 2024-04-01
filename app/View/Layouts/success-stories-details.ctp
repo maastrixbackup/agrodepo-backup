@@ -1,0 +1,83 @@
+<?php
+echo $this->element('header-home');
+//echo $this->element('sql_dump');
+//pr($SalesOrders);
+?>
+<script type="text/javascript" src="<?php echo $base_url;?>js/ckeditor/ckeditor.js"></script>
+ <div class="container">
+      <?php echo $this->Session->flash(); ?>
+	 <div class="row">					
+			<div class="innerpanel">
+				<!-- Left Sidebar Start -->
+					<?php ///echo $this->element('dashboard-left');
+					//echo $this->element('sql_dump');exit;
+					//pr($alluser);exit;
+					?>
+				<!-- Left Sidebar End -->
+				
+				<!-- Right Sidebar Start -->
+				<div class="col-md-9">
+					<div class="clearfix" style="height:15px;"></div>
+					<div class="col-lg-12 prof bs-example">					
+								<h2 class="detailstitle1 blue23"><?php echo ADDSUCESSSTORIES;?></h2>
+								<div class="clearfix"></div>
+								 <div class="clearfix" style="height:10px;"></div>
+									<?php //echo $this->Form->create('SuccessStory',array('role'=>'form','class'=>'form-horizontal')); ?>
+					   <div class="signup_left col-lg-10">
+
+						 
+						   <div class="form-group">
+							<label class="col-lg-12"><?php echo DESCRIPTION;?></label>
+							<div class="col-lg-12">
+                            <?php 
+							$user_details=$this->Custom->user_details($storyResDetails['SuccessStory']['user_id']);
+							$userName=$user_details['first_name'].' '.$user_details['last_name'];
+							$coutyyID=stripslashes($user_details['country_id']);
+							$countyyName=$this->Custom->region_nm($coutyyID);
+							$locationnID=stripslashes($user_details['locality_id']);
+							$locationnName=$this->Custom->location_nm($locationnID);
+							$profileeImg=stripslashes($user_details['profile_img']);
+							
+							if(!empty($profileeImg)){
+				?>
+                 <a href="javascript:void(0);"><img style="float:left; margin-right:20px; margin-bottom:30px;" src="<?php echo $base_url;?>files/profileimg/<?php echo $profileeImg;?>" title="<?php echo stripslashes($userName);?>" border="0" alt="<?php echo stripslashes($userName);?>"></a>
+                            <?php }else{?>
+                            <a href="javascript:void(0);"><img style="float:left; margin-right:20px; margin-bottom:30px;" src="<?php echo $base_url;?>images/profileholder.png" title="<?php echo stripslashes($userName);?>" border="0"  alt="<?php echo stripslashes($userName);?>"></a>
+                            <?php }?>
+                            
+                            
+							<?php 
+							echo '&nbsp;&nbsp;&nbsp;'.$storyResDetails['SuccessStory']['content'];
+							//if(isset($this->request->params['pass'][1]))
+							//{
+								//echo $this->Form->input('success_id');
+							//}
+							//echo $this->Form->input('user_id',array('label'=>false,'class'=>'form-control', 'type' => 'hidden', 'div' => false, 'value' => $userid));
+							//echo $this->Form->input('content',array('label'=>false,'type'=>'textarea', 'class' => 'form-control ckeditor'));?> 
+                            <?php //echo $this->Form->input('submit_from',array('label'=>false, 'div' => false,'type'=>'hidden', 'class' => 'form-control', 'value' => 1));?>
+							</div>
+						  </div>
+                          
+						  <div class="form-group">
+							<div class="col-lg-12">
+							
+							  <?php //echo $this->Form->button(SUBMIT,array('type'=>'submit', 'name' => 'success_submit','div'=>false,'class'=>'btn1 savebtn','style'=>'margin-left: 0em;'));?>
+							 
+							</div>
+						  </div>
+						  
+						  
+						  </div>
+						<!--</form>-->
+							</div>
+                    <div class="clear"></div>
+			  </div>
+				
+		</div>
+		<div class="clearfix"></div>
+    </div>
+
+  </div>
+<?php
+echo $this->element('footer-home');
+?>

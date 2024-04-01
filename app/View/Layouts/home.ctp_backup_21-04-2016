@@ -1,0 +1,305 @@
+<?php
+echo $this->element('header-home');
+//echo $this->element('sql_dump');
+?>
+
+<div class="container">
+		<div class="row">
+					
+			<div class="innerpanel">
+				<!-- Left Sidebar Start -->
+                <?php echo $this->element('home-left');?>
+					
+				<!-- Left Sidebar End -->
+				
+				
+				<!-- Right Sidebar Start -->
+				<div class="col-md-9">
+					<div class="clearfix" style="height:15px;"></div>
+					
+                    
+                      <article>
+                              
+                                <?php
+								//pr($bannerRes);
+								if(isset($bannerRes) && !empty($bannerRes))
+								{
+									?>
+                             <div class="callbacks_container">
+                                <ul class="rslides callbacks callbacks1" id="slider4"> 
+                                    <?php
+									foreach($bannerRes as $bannerResult)
+									{
+										if($bannerResult['Banner']['banner_img']!='')
+										{
+										?>
+									  <li>
+										<img src="<?php echo $base_url.'files/banner/'.$bannerResult['Banner']['banner_img'];?>" alt="<?php echo $bannerResult['Banner']['banner_title'];?>">
+										<p class="caption">
+										 <?php echo stripslashes($bannerResult['Banner']['banner_caption']);?>
+										</p>
+									  </li>
+									  <?php
+										}
+									}
+									?>
+                                    </ul>
+                                <a href="#" class="callbacks_nav callbacks1_nav prev"></a>
+                                <a href="#" class="callbacks_nav callbacks1_nav next"></a>
+                              </div> 
+                                    <?php
+								  }
+								  ?>
+                               
+                              
+                              
+                          	<div class="clearfix"></div>
+                            
+                            
+                          <div class="block block-grid block-featured">
+                            <h2>
+                              <?php echo PRODUCTPROMOTE;?>
+                            </h2>
+                            
+                            <div class="block-body newheight">
+                            	<div id="liquid1" class="liquid">
+                                <span class="previous carousel-control left"></span>
+                                <div class="wrapper" style="background:none; width:100%!important; height:278px;">
+                                <?php
+								
+								if(!empty($promoteAd))
+								{
+								?>
+                                    <ul>
+                                    <?php
+									foreach($promoteAd as $promoteadRes)
+									{
+										$postId=stripslashes($promoteadRes['PostAd']['adv_id']);
+										$adv_name=stripslashes($promoteadRes['PostAd']['adv_name']);
+										$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+										$product_cond=stripslashes($promoteadRes['PostAd']['product_cond']);
+										$price=stripslashes($promoteadRes['PostAd']['price']);
+										$currency=stripslashes($promoteadRes['PostAd']['currency']);
+										$quantity=stripslashes($promoteadRes['PostAd']['quantity']);
+										$adv_details=strip_tags(stripslashes($promoteadRes['PostAd']['adv_details']));
+										$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+										$slug=stripslashes($promoteadRes['PostAd']['slug']);
+										$salespath=$base_url.'pages/sales-details/'.$slug;
+										$salesImg=$this->Custom->BapCustUniSalesImg($postId);
+										
+										if(!empty($salesImg))
+												{
+													$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path'];
+											?>
+                                                <li>
+                                                     <div class="col">
+                                            <div class="img-wrapper">
+                                                <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                    <img src="<?php echo $imgpath;?>" border="0" width="120" height="120" class="thumb" alt="<?php echo $adv_name;?>">
+                                                </a>
+                                            </div>
+                                            <div class="ribbon"></div>
+                                            
+                                            <span class="block-title">
+                                                <a  href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" title="<?php echo $adv_name;?>">
+                                                <?php echo $adv_name;?>
+                                                </a>
+                                            </span>
+                                            <br>
+                                            <?php echo nl2br($content);?>
+                                            <br>
+                                            <div class="rating">
+                                                 <?php $avgrating=$this->Custom->SalesRatingcout($postId);
+                                                  if(!empty($avgrating))
+                                                    {
+                                                        for($singavgrating=1; $singavgrating<=round($avgrating); $singavgrating++)
+                                                        {
+                                                            if($singavgrating>$avgrating)
+                                                            {
+                                                                ?>
+                                                                <img border="0" src="<?php echo $base_url;?>/images/star-small-halfactive.png" alt="rating" />
+                                                                <?php
+                                                            }
+                                                            else
+                                                            {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-active.png" alt="rating" />
+                                                            <?php
+                                                            }
+                                                        }
+                                                    }
+                                                    if(round($avgrating)<5)
+                                                    {
+                                                        for($singavg=5; round($avgrating)<$singavg; $singavg--)
+                                                        {
+                                                            ?>
+                                                            <img border="0" src="<?php echo $base_url;?>/images/star-small-inactive.png">   
+                                                            <?php
+                                                        }
+                                                    }
+                                                 ?>
+                                            </div>
+                                            <br>
+                                            <!--<span class="price-previous">RON 0</span>-->
+                                            &nbsp;
+                                            <span class="price"><?php echo $price.' '.$currency;?></span>
+                                           
+                                        </div>
+                                                </li>
+                                        <?php
+												}
+									}
+									?>
+                                        
+                                        
+                                        
+                                    </ul>
+                                    <?php
+								}
+								?>
+                                </div>
+                                <span class="next carousel-control right"></span>
+                            </div>
+                            
+                            	
+                                <div class="clear"></div>
+                            </div>
+                          </div>
+                          
+                          <div class="clearfix" style="height:15px;"></div>
+                          <?php
+						  if(!empty($middlead)){?>
+                          <div class="block-ad">
+                             <?php
+							if($middlead['Advertisement']['ad_type']==1)
+							{
+								$adlinkmid=$middlead['Advertisement']['banner_link'];
+								$adimgmid=$middlead['Advertisement']['banner_image'];
+								$adtitlemid=$middlead['Advertisement']['banner_title'];
+							?>
+                        	<a href="<?php echo $adlinkmid;?>" target="_blank"><img src="<?php echo $base_url;?>files/advertisement/<?php echo $adimgmid;?>" alt="<?php echo $adtitlemid;?>" style="width:100%;"></a>
+                            <?php }else if($middlead['Advertisement']['ad_type']==2){
+								echo stripslashes($middlead['Advertisement']['ad_script']);
+								}
+							?>
+                        </div>
+                        <?php }?>
+                         
+                          
+                         
+                          <div class="clearfix"></div>
+                          <?php echo $this->element('home-tab');?>
+                        
+                        <div class="clearfix" style="height:15px;"></div>
+                        
+                        
+                            <?php
+							
+							if(isset($recentViews) && !empty($recentViews))
+							{
+								//print_r($_COOKIE['recentSale']);exit;
+								$sessionSales=$recentViews;
+								//krsort($sessionSales);
+								?>
+                            <div class="block block-grid block-featured">
+                            <h2 style="margin-top: 5px;">
+                              <?php echo RECENTVIEW;?>:
+                            </h2>
+                            <div class="block-body newheight">
+                            	<div id="liquid2" class="liquid2">
+                                <span class="previous carousel-control left"></span>
+                                <div class="wrapper" style="background:none; width:100%!important; height:278px;">
+                                    <ul>
+                                    <?php
+									if(!empty($sessionSales))
+									{
+										foreach($sessionSales as $sessionSalesID)
+										{
+											$salesDetail=$this->Custom->BapCustUniSales($sessionSalesID);
+											if(!empty($salesDetail))
+											{
+												$postId=stripslashes($salesDetail['PostAd']['adv_id']);
+												$adv_name=stripslashes($salesDetail['PostAd']['adv_name']);
+												$adv_name=(strlen($adv_name)>15) ? substr($adv_name,0,15).'...' : $adv_name;
+												$product_cond=stripslashes($salesDetail['PostAd']['product_cond']);
+												$price=stripslashes($salesDetail['PostAd']['price']);
+												$currency=stripslashes($salesDetail['PostAd']['currency']);
+												$quantity=stripslashes($salesDetail['PostAd']['quantity']);
+												$adv_details=strip_tags(stripslashes($salesDetail['PostAd']['adv_details']));
+												$content=(strlen($adv_details)>30) ? substr($adv_details,0,30).'...' : $adv_details;
+												$slug=stripslashes($salesDetail['PostAd']['slug']);
+												$salespath=$base_url.'pages/sales-details/'.$slug;
+												$salesImg=$this->Custom->BapCustUniSalesImg($sessionSalesID);
+												if(!empty($salesImg))
+												{
+													$imgpath=$base_url.'files/postad/'.$salesImg['PostadImg']['img_path'];
+											?>
+                                                <li>
+                                                     <div class="col">
+                                            <div class="img-wrapper">
+                                                <a href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" link="<?php echo $imgpath;?>" title="<?php echo $adv_name;?>">
+                                                    <img src="<?php echo $imgpath;?>" border="0" width="120" height="120" class="thumb" alt="<?php echo $adv_name;?>">
+                                                </a>
+                                            </div>
+                                            <div class="ribbon"></div>
+                                            
+                                            <span class="block-title">
+                                                <a  href="javascript:void(0);" onclick="saveView(<?php echo $postId;?>,'<?php echo $salespath;?>');" title="<?php echo $adv_name;?>">
+                                                <?php echo $adv_name;?>
+                                                </a>
+                                            </span>
+                                            <br>
+                                            <?php echo nl2br($content);?>
+                                            <br>
+                                            <div class="rating">
+                                                <img src="<?php echo $base_url;?>images/star-small-inactive.png" border="0">
+                                                <img src="<?php echo $base_url;?>images/star-small-inactive.png" border="0">
+                                                <img src="<?php echo $base_url;?>images/star-small-inactive.png" border="0">
+                                                <img src="<?php echo $base_url;?>images/star-small-inactive.png" border="0">
+                                                <img src="<?php echo $base_url;?>images/star-small-inactive.png" border="0">
+                                            </div>
+                                            <br>
+                                            <!--<span class="price-previous">RON 0</span>-->
+                                            &nbsp;
+                                            <span class="price"><?php echo $price.' '.$currency;?></span>
+                                        </div>
+                                                </li>
+                                        <?php
+												}
+											}
+										}
+									}
+									?>
+                                    
+									</ul>
+                                </div>
+                                 
+                                <span class="next carousel-control right"></span>
+                            </div>
+                            
+                            <div  id="successstories"></div>
+                                <div class="clear"></div>
+                            </div>
+                           </div>
+                            <?php }?>
+                          
+                          
+                  </article>
+					
+			  </div>
+				<!-- Right Sidebar end -->
+				
+				<div class="clearfix" style="height:1px;"></div>
+                
+                
+                 <?php echo $this->element('home-bottom');?>
+               
+                          
+			   
+			</div>
+		</div>
+		<div class="clearfix"></div>
+    </div>
+<?php
+echo $this->element('footer-home');
+?>

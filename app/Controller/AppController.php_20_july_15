@@ -1,0 +1,92 @@
+<?php
+/**
+ * Application level Controller
+ *
+ * This file is application-wide controller file. You can put all
+ * application-wide controller-related methods here.
+ *
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       app.Controller
+ * @since         CakePHP(tm) v 0.2.9
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
+App::uses('Controller', 'Controller');
+
+/**
+ * Application Controller
+ *
+ * Add your application-wide methods in the class below, your controllers
+ * will inherit them.
+ *
+ * @package		app.Controller
+ * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
+ */
+class AppController extends Controller {
+	public $components = array('Paginator', 'Session', 'Cookie', 'RequestHandler');
+	public function beforeRender(){
+		$this->response->disableCache();
+		//$this->set('fb_login_url', $this->Facebook->getLoginUrl(array('redirect_uri' => Router::url(array('controller' => 'users', 'action' => 'login'), true))));
+		//$this->set('user', $this->Auth->user());
+		//$user_fb = $this->Facebook->getUser();
+		//$this->set('base_url', $this->webroot);
+		$this->set('base_url', 'http://'.$_SERVER['SERVER_NAME'].Router::url('/'));
+		//date_default_timezone_set("America/New_York");
+		$this->loadModel('Theme');
+		$themeRes=$this->Theme->find('all', array('conditions' => array('status' => 1), 'order' => array('theme_id' => 'desc')));
+		$this->set('themeRes',$themeRes);
+		//-----------------------------------------------------
+		$this->loadModel('MasterMessage');
+		$emailExist=$this->MasterMessage->find('first', array('conditions' => array('msg_id' =>61)));
+		$successMsg=$this->MasterMessage->find('first', array('conditions' => array('msg_id' =>62)));
+		$failMsg=$this->MasterMessage->find('first', array('conditions' => array('msg_id' => 63)));
+		$verisuccessMsg=$this->MasterMessage->find('first', array('conditions' => array('msg_id' =>64)));
+		$verifailMsg=$this->MasterMessage->find('first', array('conditions' => array('msg_id' => 64)));
+		$this->set('emailExist',$emailExist['MasterMessage']['msg']);
+		$this->set('successMsg',$successMsg['MasterMessage']['msg']);
+		$this->set('failMsg',$failMsg['MasterMessage']['msg']);
+		$this->set('verisuccessMsg',$verisuccessMsg['MasterMessage']['msg']);
+		$this->set('verifailMsg',$verifailMsg['MasterMessage']['msg']);
+		//-------------------------------------------------------
+	}
+	
+	public function noticeStatus()
+	{
+		if($this->Session->check('User'))
+		{
+			$user=$this->Session->read('User');
+			if($this->request->is('post'))
+			{
+				if(isset($this->request->data['noticetype']))
+				{
+					$this->loadModel('Notice');
+					$update=$this->Notice->query("update notice set user_status='1' where notice_type='".$this->request->data['noticetype']."' and user_id='".$user['user_id']."'");
+					
+						echo 1;
+				}
+				else
+				{
+					echo 2;
+				}
+			}
+			else
+			{
+				echo 2;
+			}
+		}
+		else
+		{
+			echo 3;
+		}
+		exit;
+	}
+	
+}
